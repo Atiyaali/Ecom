@@ -1,0 +1,123 @@
+
+{% extends "base/base.html" %}
+
+
+{% block start %}
+<section class="section-content padding-y">
+    <div class="container">
+    
+    <div class="row">
+        <main class="col-md-9">
+    <div class="card">
+    
+    <table class="table table-borderless table-shopping-cart">
+    <thead class="text-muted">
+    <tr class="small text-uppercase">
+      <th scope="col">Product</th>
+      <th scope="col" width="120">Quantity</th>
+      <th scope="col" width="120">Price</th>
+      <th scope="col" class="text-right" width="200"> </th>
+    </tr>
+  
+    </thead>
+
+    <tbody>
+        {% for entry in cartitem %}
+    <tr>
+        <td>
+            <figure class="itemside">
+                <div class="aside"><img src="/media/{{entry.item.product.ProductImages.first.product_image}}" class="img-sm"></div>
+                <figcaption class="info">
+                    <a href="#" class="title text-dark">{{entry.item.product.product_name}}</a>
+                    <p class="text-muted small">{{entry.item.size_variant}} <br> Brand: Gucci</p>
+                </figcaption>
+            </figure>
+        </td>
+        <td> 
+            <select class="form-control"id="quantity" >
+                <option>1</option>
+                <option>2</option>	
+                <option>3</option>	
+                <option>4</option>	
+            </select> 
+        </td>
+        <td> 
+            <div class="price-wrap"> 
+                <var class="price">${{entry.price}}</var> 
+                <small class="text-muted"> $315.20 each </small> 
+            </div> <!-- price-wrap .// -->
+        </td>
+        <td class="text-right"> 
+        <a data-original-title="Save to Wishlist" title="" href="" class="btn btn-light" data-toggle="tooltip"> <i class="fa fa-heart"></i></a> 
+        <a href="{% url 'remove_cart' entry.item.uid%}" class="btn btn-light"> Remove</a>
+        </td>
+    </tr>
+      {%endfor%}
+
+
+    </tbody>
+
+    </table>
+    
+    <div class="card-body border-top">
+        <a href="{% url 'cartOrder' %}" class="btn btn-primary float-md-right"> Make Purchase <i class="fa fa-chevron-right"></i> </a>
+
+        <a href="#" class="btn btn-light"> <i class="fa fa-chevron-left"></i> Continue shopping </a>
+    </div>	 
+    </div> <!-- card.// -->
+    
+    <div class="alert alert-success mt-3">
+        <p class="icontext"><i class="icon text-success fa fa-truck"></i> Free Delivery within 1-2 weeks</p>
+    </div>
+    
+        </main> <!-- col.// -->
+        
+        <aside class="col-md-3">
+            <div class="card mb-3">
+                <div class="card-body">
+                <form action="/accounts/coupen" method="POST">
+                    {% include "base/alert.html" %}
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label>Have coupon?</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" name="coupen" placeholder="Coupon code">
+                            <span class="input-group-append"> 
+                                <button type="submit" class="btn btn-primary">Apply</button>
+                            </span>
+                            
+                        </div>
+                    </div>
+
+                </form>
+                {% if cart.coupen %}
+                <a href="{% url 'remove-coupen' cart.uid%}" class="btn btn-success">{{cart.coupen.coupen_code}}</a>
+                {% endif %}
+                </div> <!-- card-body.// -->
+            </div>  <!-- card .// -->
+            <div class="card">
+                <div class="card-body">
+                       {% if cart.coupen %}                     
+                        <dl class="dlist-align">
+                          <dt>Discount:</dt>
+                          <dd class="text-right">${{cart.coupen.discount}}</dd>
+                        </dl>
+                        {% endif %}
+                        <dl class="dlist-align">
+                          <dt>Total:</dt>
+                          <dd class="text-right  h5"><strong>${{final}}</strong></dd>
+                        </dl>
+                        <hr>
+                        <p class="text-center mb-3">
+                            <img src="images/misc/payments.png" height="26">
+                        </p>
+                        
+                </div> <!-- card-body.// -->
+            </div>  <!-- card .// -->
+        </aside> <!-- col.// -->
+    </div>
+    
+    </div> <!-- container .//  -->
+    </section>
+
+    {% endblock %}

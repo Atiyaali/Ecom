@@ -1,0 +1,41 @@
+{% extends "base/base.html"%}
+
+{%  block start %}
+
+<section class="section-content padding-y bg">
+  <div class="container">
+    {{Order.uid}} <br>
+    <h2>Order Items</h2>
+    <ul>
+        {% for item in Order.products.all %}
+            <li>
+                Product: {{ item.Product.product_name}}<br>
+                Size : {{item.size}}
+            </li>
+
+        {% endfor %}
+    </ul>
+
+    {{Order.Price}}
+  <!-- ============================ COMPONENT 1 ================================= -->
+
+  
+             <!-- Checkout form -->
+            <form method="POST" action="/accounts/Createcheckoutsession" id="checkout-form">
+                {% csrf_token %}   
+                {% comment %} <input type="hidden" name="quantity" id="hidden-quantity" value="1"> {% endcomment %}
+                <input type="hidden" name="OrderId" value="{{Order.uid}}">
+                {% comment %} <input type="hidden" name="product_price" value="{{ product.product_price }}">
+                <input type="hidden" name="product_name" value="{{Order.Product.product_name}}">
+                <input type="hidden" name="product_description" value="{{ product.product_description }}"> {% endcomment %}
+                <button type="submit" id="checkout-button">Checkout</button>
+            </form>
+            
+
+  
+   
+  </div>
+  </section>
+
+
+{% endblock %}
